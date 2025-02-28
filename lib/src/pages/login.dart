@@ -17,7 +17,7 @@ class PageLogin extends StatelessWidget {
         ElevatedButton(onPressed: () => {
           Navigator.of(context).push(
             MaterialPageRoute(
-              builder: (context) => const PageHome()
+              builder: (context) => const PageHome(appTitle: 'Music app')
             )
           )
         },

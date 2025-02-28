@@ -8,7 +8,6 @@ class UiTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // return Text(title);
 
     return Container(
       margin: StyleUiTitle.margin, // Je veux changer l'écriture (Chatgpt)

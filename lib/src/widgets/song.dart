@@ -6,9 +6,9 @@ class Song {
   String artiste;
 
   Song({
-    required this.directory, //="",
-    required this.title, //="Musique inconnue",
-    this.album="Inconnu",
-    this.artiste="Inconnu",
+    required this.directory,
+    required this.title,
+    this.album="Album inconnu",
+    this.artiste="Artiste inconnu",
   });
 }

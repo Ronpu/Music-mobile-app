@@ -7,8 +7,6 @@ import 'package:music_app/src/widgets/homeTabBar.dart';
 import 'package:music_app/src/widgets/style.dart';
 import 'package:music_app/src/widgets/title.dart';
 
-import 'package:music_app/src/widgets/musicFind.dart';
-
 class PageHome extends StatelessWidget {
 
   final String appTitle;

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 // 
 import 'package:music_app/src/pages/musicPlayerPage.dart';
-import 'package:music_app/src/pages/musicPlayerPage2.dart';
 import 'package:music_app/src/widgets/song.dart';
 // 
 import 'package:music_app/src/widgets/style.dart';
@@ -51,8 +50,6 @@ class MorceauxPageState extends State<MorceauxPage> with AutomaticKeepAliveClien
 
     _loadMusicFiles();
 
-    // List<String> listeMorceaux = <String>['A', 'B', 'C'];
-
     return ListView.builder(
       padding: const EdgeInsets.only(top: 15, left: 15, right: 15,), /* Padding de l'ensemble des lignes */
       scrollDirection: Axis.vertical,
@@ -72,40 +69,6 @@ class MorceauxPageState extends State<MorceauxPage> with AutomaticKeepAliveClien
 
             /* Ecritures dans les lignes */
             child: 
-            
-            // ListView.builder(
-            //   itemCount: listeMorceaux.length + (isLoading ? 1 : 0), // Add 1 for the loading indicator if still loading
-            //   itemBuilder: (context, index) {
-            //     if (index < listeMorceaux.length) {
-            //       // Return the normal row with song information
-            //       return GestureDetector(
-            //         onTap: () {
-            //           // Handle song selection
-            //         },
-            //         child: Container(
-            //           // padding: EdgeInsets.all(8.0),
-            //           child: Row(
-            //             children: [
-            //               const Icon(Icons.play_circle_fill_rounded),
-            //               TextDefault( text: listeMorceaux[index], pMargin: const EdgeInsets.only(left: 5), ),
-            //               TextDefault( text: 'Artiste : ???${listeMorceaux.length}-$index-$isLoading', pMargin: const EdgeInsets.only(left: 60), ),
-            //             ],
-            //           ),
-            //         ),
-            //       );
-            //     } else {
-            //       // Return the loading indicator at the bottom if still loading
-            //       return Padding(
-            //         padding: const EdgeInsets.symmetric(vertical: 16.0),
-            //         child: Center(
-            //           child: CircularProgressIndicator(),
-            //         ),
-            //       );
-            //     }
-            //   },
-            // )
-
-            // //
             Column(
               children: [
                 Row(
@@ -124,7 +87,6 @@ class MorceauxPageState extends State<MorceauxPage> with AutomaticKeepAliveClien
                 )
               ],
             ) 
-            // //
 
           ),
 
@@ -132,8 +94,7 @@ class MorceauxPageState extends State<MorceauxPage> with AutomaticKeepAliveClien
           onTap: () {
             Navigator.of(context).push(
               MaterialPageRoute(
-                // builder: (context) => MusicPlayerPage(titreMusique: listeMorceaux[index], album: 'album_name', artiste: 'artiste_name',)
-                builder: (context) => MusicPlayerPage2(song: listeMorceaux[index])
+                builder: (context) => MusicPlayerPage(song: listeMorceaux[index])
               )
             );
           },
@@ -175,7 +136,7 @@ class MorceauxPageState extends State<MorceauxPage> with AutomaticKeepAliveClien
             setState(() {
               Song song = Song(
                 directory: file.path, 
-                title: file.uri.pathSegments.last,
+                title: file.uri.pathSegments.last.substring(0, file.uri.pathSegments.last.length - 4),
                 // album: ???,
                 // artiste: ???,
               );
@@ -205,53 +166,31 @@ class MorceauxPageState extends State<MorceauxPage> with AutomaticKeepAliveClien
     
     if (permissionsStorage == true){
 
-      // bool storageFound = false;
+      // Refresh la liste
       listeMorceaux = [];
 
+      // // WINDOWS : RECUP LES MUSIQUES TESTS 
       if (Platform.isWindows){
-      // if (storageFound == false){
-        // Directory musicDirectory = Directory('/storage/emulated/0/Music'); // Adjust the path
-        Directory? dir = Directory('C:/Users/hippolyte/Documents/Ynov M2/Cours Flutter (app mobile)/music_app/assets/songs'); // Adjust the path
-        // Directory musicDirectory = Directory('../assets/songs'); // Adjust the path
-        
-        // listeMorceaux.addAll(await _getMusicFiles(dir));
-        if (dir.existsSync()) {
-        
-          // List<FileSystemEntity> 
-          final files = dir.listSync(recursive: true);
+        Directory dir = Directory('${Directory.current.path}/assets/songs/');        
+        listeMorceaux.addAll(await _getMusicFiles(dir));
+      }
+      // //
 
-          for (var file in files) {
-            if (file is File && file.path.endsWith(".mp3")) {
-              setState(() {
-                // _listeMorceaux.add(file.path);
-                // listeMorceaux.add(file.uri.pathSegments.last);
-                Song song = Song(
-                  directory: file.path, 
-                  title: file.uri.pathSegments.last,
-                  // album: ???,
-                  // artiste: ???,
-                );
-                listeMorceaux.add(song);
-              });
-            }
+      // // PHONE (?android?): CHERCHE DANS LE STORAGE, JSP SI CA MARCHE (bug sur pc) :
+      else { // else if (Platform.isAndroid) {
+        Directory? dir = await getExternalStorageDirectory();
+        if (dir != null){
+          listeMorceaux.addAll(await _getMusicFiles(dir));
+        }
+      
+        List<Directory>? listDir = await getExternalStorageDirectories();
+        if (listDir != null) {
+          for (var dir in listDir){
+            listeMorceaux.addAll(await _getMusicFiles(dir));
           }
-
         }
       }
 
-      // Directory? dir = await getExternalStorageDirectory();
-      // if (dir != null){
-      //   // storageFound = true;
-      //   listeMorceaux.addAll(await _getMusicFiles(dir));
-      // }
-      
-      // List<Directory>? listDir = await getExternalStorageDirectories();
-      // if (listDir != null) {
-      //   // storageFound = true;
-      //   for (var dir in listDir){
-      //     listeMorceaux.addAll(await _getMusicFiles(dir));
-      //   }
-      // }
     }
     
     setState(() {

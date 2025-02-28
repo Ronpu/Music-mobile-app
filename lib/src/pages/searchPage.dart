@@ -7,9 +7,6 @@ class SearchPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    // return const UiTitle(title: "Page d'accueil");
-
-
     return Scaffold(
       backgroundColor: StyleDarkMode.backgroundColor,
 
